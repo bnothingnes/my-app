@@ -1,6 +1,7 @@
 package com.example.my_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.ContentLoadingProgressBar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
-
     }
 }

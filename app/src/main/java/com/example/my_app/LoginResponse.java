@@ -1,8 +1,11 @@
 package com.example.my_app;
 
+import java.lang.reflect.Array;
+
 public class LoginResponse {
     private String status;
     private String pesan;
+    private Object data;
 
     public String getStatus() {
         return status;

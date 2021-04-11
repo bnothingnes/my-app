@@ -21,6 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btnlogin;
     TextView toreg;
     EditText email, password;
+    LoadingDialog loadingDialog = new LoadingDialog(LoginActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                 LoginRequest loginRequest = new LoginRequest();
                 loginRequest.setEmail(email.getText().toString());
                 loginRequest.setPassword(password.getText().toString());
+                loadingDialog.startLoading();
                 loginUser(loginRequest);
             }
         });
@@ -61,10 +63,12 @@ public class LoginActivity extends AppCompatActivity {
 
 //                    Log.i(status, status);
                     if (status.equals("success")) {
-                        Toast.makeText(LoginActivity.this, pesan, Toast.LENGTH_LONG).show();
+                        loadingDialog.closeLoading();
+//                        Toast.makeText(LoginActivity.this, pesan, Toast.LENGTH_LONG).show();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {
+                        loadingDialog.closeLoading();
                         Toast.makeText(LoginActivity.this, pesan, Toast.LENGTH_LONG).show();
                     }
 

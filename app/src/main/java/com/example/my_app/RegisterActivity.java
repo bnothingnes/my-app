@@ -1,6 +1,7 @@
 package com.example.my_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.ContentLoadingProgressBar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
     TextView tolog;
     Button register;
     EditText nama,email,password;
+    LoadingDialog loadingDialog = new LoadingDialog(RegisterActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
                 registerRequest.setEmail(email.getText().toString());
                 registerRequest.setNama(nama.getText().toString());
                 registerRequest.setPassword(password.getText().toString());
+                loadingDialog.startLoading();
                 registerUser(registerRequest);
             }
         });
@@ -58,17 +61,26 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
                 if(response.isSuccessful()) {
                     String message = response.body().getPesan();
-                    Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                    finish();
+                    String status = response.body().getStatus();
+                    if (status.equals("success")) {
+                        loadingDialog.closeLoading();
+//                        Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                        finish();
+                    } else {
+                        loadingDialog.closeLoading();
+                        Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
+                    }
+
                 } else {
+                    loadingDialog.closeLoading();
                     String message = "gagal mendaftar";
                     Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
                 }
             }
-
             @Override
             public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                loadingDialog.closeLoading();
                 String message = t.getLocalizedMessage();
                 Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
             }
