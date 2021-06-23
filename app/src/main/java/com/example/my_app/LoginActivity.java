@@ -60,12 +60,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String status = response.body().getStatus();
                     String pesan = response.body().getPesan();
-
-//                    Log.i(status, status);
+                    LoginResponse loginResponse = response.body();
                     if (status.equals("success")) {
                         loadingDialog.closeLoading();
-//                        Toast.makeText(LoginActivity.this, pesan, Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        Toast.makeText(LoginActivity.this, pesan, Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("data",loginResponse));
                         finish();
                     } else {
                         loadingDialog.closeLoading();
